@@ -65,9 +65,10 @@ namespace SubtitlesViewer
         private void SetupView()
         { 
             var screenRes = screenResolution();
+            int PANEL_HIGHT = 180;
             subtitlesPanel = new NSPanel
             (
-                new CoreGraphics.CGRect(40, 50, screenRes.Width - 80, 120),
+                new CoreGraphics.CGRect(40, 50, screenRes.Width - 80, PANEL_HIGHT),
                 NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Resizable | NSWindowStyle.Miniaturizable | NSWindowStyle.DocModal,
                 NSBackingStore.Buffered, true
             )
@@ -85,7 +86,7 @@ namespace SubtitlesViewer
 
             subtitlesPanel.OrderFront(null);
 
-            subtitleTextButton = new NSButton(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, 90))
+            subtitleTextButton = new NSButton(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HIGHT-30))
             {
                 Title = "",
                 WantsLayer = true
@@ -93,7 +94,7 @@ namespace SubtitlesViewer
 
             subtitleTextButton.Layer.BackgroundColor = NSColor.Clear.CGColor;
 
-            subtitleTextField = new NSTextField(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, 90))
+            subtitleTextField = new NSTextField(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HIGHT-30))
             {
                 Alignment = NSTextAlignment.Center
             };
@@ -136,7 +137,7 @@ namespace SubtitlesViewer
             var attrString = new NSAttributedString
             (
                 text,
-                font: NSFont.FromFontName("Arial", 36.0f),
+                font: NSFont.FromFontName("Arial", 72.0f),
                 foregroundColor: NSColor.White,
                 backgroundColor: NSColor.FromCalibratedRgba(0, 0, 0, 0.0f),
                 paragraphStyle: paragraph
