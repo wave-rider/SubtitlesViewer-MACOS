@@ -114,9 +114,7 @@ namespace SubtitlesViewer
             startStopButton = new NSButton(new CoreGraphics.CGRect(0, 60, 40, 30));
             startStopButton.Title = "Play";
             startStopButton.Activated += (object sender, EventArgs e) => {
-                bool stop = subtitlesProvider.Playing;
-                startStopButton.Title = stop ? "Play" : "Stop";
-                subtitlesProvider.StartStop(stop);
+                subtitlesProvider.StartStop(subtitlesProvider.Playing);
             };
 
             subtitlesPanel.ContentView.AddSubview(subtitleTextButton, NSWindowOrderingMode.Below, null);
@@ -150,7 +148,6 @@ namespace SubtitlesViewer
         {
             subtitlesProvider.PlayStateChanged+=SubtitlesProvider_PlayStateChanged;
             subtitlesProvider.SubtitleChanged+=SubtitlesProvider_SubtitleChanged;
-
         }
 
         void SubtitlesProvider_SubtitleChanged(SubtitleEventArgs e)
@@ -168,12 +165,16 @@ namespace SubtitlesViewer
 
         void SubtitlesProvider_PlayStateChanged(object sender, EventArgs e)
         {
-
+            bool playState = subtitlesProvider.Playing;
+            startStopButton.Title = playState ? "Stop" : "Play";
         }
 
         partial void ClickedButton(NSObject sender)
         {
             var nsUrl = subtitleFileSelector.GetFile();
+            if (nsUrl == null)
+                return;
+
             fileName = nsUrl.Path;
             subtitlesProvider.ReadFromFile(fileName);
             subtitlesProvider.SetSubTitle(0);

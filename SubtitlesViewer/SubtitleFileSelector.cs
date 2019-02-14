@@ -6,13 +6,8 @@ namespace SubtitlesViewer
 {
     public class SubtitleFileSelector
     {
-        public SubtitleFileSelector()
-        {
-        }
-
         public NSUrl GetFile()
         {
-            int i;
             // Create the File Open Dialog class.
             NSOpenPanel openDlg = NSOpenPanel.OpenPanel;
 

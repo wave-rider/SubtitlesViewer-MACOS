@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Timers;
+using System.Timers; 
 
 namespace SubtitlesPlayer
 {
@@ -12,22 +12,45 @@ namespace SubtitlesPlayer
 
     public class SubtitlesProvider
     {
-        List<SubtitleItem> _items;
-        int _currentIndex = -1;
+        List<SubtitleItem> _items = new List<SubtitleItem>();
+        private int _currentIndex = -1;
+        private int CurrentIndex
+        {
+            get => _currentIndex;
+            set
+            {
+                _currentIndex = value;
+            }
+        }
         DateTime _startTime;
-        int _startIndex;
+        private int StartIndex
+        {
+            get => _startIndex;
+            set
+            {
+                _startIndex = value;
+            }
+        }
         float _offset = 0;
 
         Timer _timer = new Timer();
         private bool _playing = true;
         private bool _previousPlaying = false;
+        private int _startIndex;
 
-        public bool Playing { get => _playing;
-            set {
+        public bool Playing
+        {
+            get => _playing;
+            set
+            {
                 _previousPlaying = _playing;
                 _playing = value;
             }
         }
+
+        private bool _fileLoaded = false;
+
+        public bool FileLoaded { get { return _fileLoaded; } set { _fileLoaded = value; } }
 
         public event SubtitleEventHandler SubtitleChanged;
         public event EventHandler PlayStateChanged;
@@ -47,11 +70,11 @@ namespace SubtitlesPlayer
 
             var timeSpan = DateTime.Now.Subtract(_startTime);
             var passedMilliseconds = timeSpan.TotalMilliseconds;
-         
-            if (passedMilliseconds+_offset > _items[_currentIndex].EndTime - _items[_startIndex].StartTime)
+
+            if (passedMilliseconds + _offset > _items[CurrentIndex].EndTime - _items[StartIndex].StartTime)
             {
-                _currentIndex++;
-                if (_currentIndex == _items.Count)
+                CurrentIndex++;
+                if (CurrentIndex == _items.Count)
                 {
                     StartStop(true);
                 }
@@ -66,7 +89,8 @@ namespace SubtitlesPlayer
         {
             if (SubtitleChanged != null)
             {
-                SubtitleChanged.Invoke(new SubtitleEventArgs { Item = _items[_currentIndex], RowIndex = _currentIndex });
+                var currentItem = _items.ElementAtOrDefault(CurrentIndex);
+                SubtitleChanged.Invoke(new SubtitleEventArgs { Item = currentItem, RowIndex = CurrentIndex });
             }
         }
 
@@ -92,25 +116,18 @@ namespace SubtitlesPlayer
             PlayStateChanged?.Invoke(this, new EventArgs());
         }
 
-        public void SetSubTitle(int index, bool setStartTime=false)
+        public void SetSubTitle(int index)
         {
-            if ((Playing && Playing != _previousPlaying) || setStartTime)
-            {
-                _timer.Stop();
-                _currentIndex = index;
-                _startIndex = index;
-                _startTime = DateTime.Now;
-                Playing = true;
-                _offset = 0;
-                NotifyListener();
-                _timer.Start();
-                NotifyPlayStateChanged();
-            }
-            else
-                _timer.Stop();
 
-            
-            
+            _timer.Stop();
+            CurrentIndex = index;
+            StartIndex = index;
+            _startTime = DateTime.Now;
+            Playing = true;
+            _offset = 0;
+            NotifyListener();
+            _timer.Start();
+            NotifyPlayStateChanged();
         }
 
         public List<SubtitleItem> ReadFromFile(string file)
@@ -123,18 +140,20 @@ namespace SubtitlesPlayer
                 try
                 {
                     var mostLikelyFormat = parser.GetMostLikelyFormat(fileName);
-                    var items = parser.ParseStream(fileStream, Encoding.UTF8, mostLikelyFormat);
+                    var parsedItems = parser.ParseStream(fileStream, Encoding.UTF8, mostLikelyFormat);
+                    var items = GetItems(parsedItems);
+
                     if (items.Any())
                     {
                         items.Insert(0, new SubtitleItem { });
                         _items = items;
+                        _fileLoaded = true;
                         return items;
                     }
                     else
                     {
                         throw new ArgumentException("Not items found!");
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -145,16 +164,42 @@ namespace SubtitlesPlayer
             return new List<SubtitleItem>();
         }
 
+        private List<SubtitleItem> GetItems(List<SubtitleItem> items)
+        {
+            var list = new List<SubtitleItem>();
+            foreach (var item in items)
+            {
+                list.Add(
+                    new SubtitleItem
+                    {
+                        StartTime = item.StartTime,
+                        EndTime = item.EndTime,
+                        Lines = item.Lines
+                    }
+                    );
+            }
+
+            return list;
+        }
+
         internal void Forward()
         {
-            _currentIndex++;
-            SetSubTitle(_currentIndex, true);
+            if (CurrentIndex + 1 >= _items.Count)
+            {
+                return;
+            }
+
+            CurrentIndex++;
+            SetSubTitle(CurrentIndex);
         }
 
         internal void Back()
         {
-            if (_currentIndex > 0) _currentIndex--;
-            SetSubTitle(_currentIndex, true);
+            if (CurrentIndex - 1 < 0)
+                return;
+            if (CurrentIndex > 0)
+                CurrentIndex--;
+            SetSubTitle(CurrentIndex);
         }
     }
 }
