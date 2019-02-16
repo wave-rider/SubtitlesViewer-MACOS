@@ -4,5 +4,5 @@ This open source app shows the subtitles on top of all other windows
 # Libraries
 This project is using https://github.com/AlexPoint/SubtitlesParser
 
-# Similair project written in QT
+# Similar project written in QT
 https://github.com/carsonip/Penguin-Subtitle-Player
