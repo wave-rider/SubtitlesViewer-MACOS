@@ -65,10 +65,10 @@ namespace SubtitlesViewer
         private void SetupView()
         { 
             var screenRes = screenResolution();
-            int PANEL_HIGHT = 200;
+            int PANEL_HEIGHT = 200;
             subtitlesPanel = new NSPanel
             (
-                new CoreGraphics.CGRect(40, 50, screenRes.Width - 80, PANEL_HIGHT),
+                new CoreGraphics.CGRect(40, 50, screenRes.Width - 80, PANEL_HEIGHT),
                 NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Resizable | NSWindowStyle.Miniaturizable | NSWindowStyle.DocModal,
                 NSBackingStore.Buffered, true
             )
@@ -86,7 +86,7 @@ namespace SubtitlesViewer
 
             subtitlesPanel.OrderFront(null);
 
-            subtitleTextButton = new NSButton(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HIGHT-30))
+            subtitleTextButton = new NSButton(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HEIGHT-30))
             {
                 Title = "",
                 WantsLayer = true
@@ -94,7 +94,7 @@ namespace SubtitlesViewer
 
             subtitleTextButton.Layer.BackgroundColor = NSColor.Clear.CGColor;
 
-            subtitleTextField = new NSTextField(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HIGHT-30))
+            subtitleTextField = new NSTextField(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HEIGHT-30))
             {
                 Alignment = NSTextAlignment.Center
             };
