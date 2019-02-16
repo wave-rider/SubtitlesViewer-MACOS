@@ -65,7 +65,7 @@ namespace SubtitlesViewer
         private void SetupView()
         { 
             var screenRes = screenResolution();
-            int PANEL_HIGHT = 180;
+            int PANEL_HIGHT = 200;
             subtitlesPanel = new NSPanel
             (
                 new CoreGraphics.CGRect(40, 50, screenRes.Width - 80, PANEL_HIGHT),
@@ -133,6 +133,8 @@ namespace SubtitlesViewer
             var paragraph = new NSMutableParagraphStyle();
 
             paragraph.Alignment = NSTextAlignment.Center;
+            paragraph.LineBreakMode = NSLineBreakMode.ByWordWrapping;
+
 
             var attrString = new NSAttributedString
             (
