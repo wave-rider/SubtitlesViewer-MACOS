@@ -54,7 +54,7 @@ namespace SubtitlesPlayer
 
         public event SubtitleEventHandler SubtitleChanged;
         public event EventHandler PlayStateChanged;
-
+       
         public SubtitlesProvider()
         {
             _timer.Interval = 200;  //in milliseconds
@@ -109,6 +109,11 @@ namespace SubtitlesPlayer
             }
 
             NotifyPlayStateChanged();
+        }
+
+        public void StartStop()
+        {
+            StartStop(Playing);
         }
 
         private void NotifyPlayStateChanged()

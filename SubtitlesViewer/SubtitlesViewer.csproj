@@ -104,6 +104,9 @@
     <Compile Include="SubtitlesParser\StreamHelpers.cs" />
     <Compile Include="SubtitlesParser\SubtitlesFormat.cs" />
     <Compile Include="SubtitleFileSelector.cs" />
+    <Compile Include="NSPanelExt.cs" />
+    <Compile Include="KeyCode.cs" />
+    <Compile Include="KeyCodeEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
