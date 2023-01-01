@@ -89,18 +89,16 @@ namespace SubtitlesViewer
             subtitlesPanel.KeyPressed += SubtitlesPanel_KeyPressed;
           
             subtitleTextButton = new NSButton(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HEIGHT-30))
+
+            subtitleTextButton = new NSButton(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HEIGHT - 30))
             {
                 Title = "",
                 WantsLayer = true
             };
 
             subtitleTextButton.Layer.BackgroundColor = NSColor.Clear.CGColor;
-
-            subtitleTextField = new NSTextField(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HEIGHT-30))
-            {
-                Alignment = NSTextAlignment.Center
-            };
-            subtitleTextField.Cell.Alignment = NSTextAlignment.Center;
+            subtitleTextButton.Bordered = false;
+            // https://stackoverflow.com/questions/36112061/remove-background-from-nsbutton
 
             forwardButton = new NSButton(new CoreGraphics.CGRect(0, 0, 40, 30));
             forwardButton.Title = ">>";
@@ -124,8 +122,7 @@ namespace SubtitlesViewer
             };
 
             subtitlesPanel.ContentView.AddSubview(subtitleTextButton, NSWindowOrderingMode.Below, null);
-            subtitlesPanel.ContentView.AddSubview(subtitleTextField, NSWindowOrderingMode.Below, null);
-
+       
             subtitlesPanel.ContentView.AddSubview(forwardButton, NSWindowOrderingMode.Below, null);
             subtitlesPanel.ContentView.AddSubview(backButton, NSWindowOrderingMode.Below, null);
             subtitlesPanel.ContentView.AddSubview(startStopButton, NSWindowOrderingMode.Below, null);
@@ -183,12 +180,11 @@ namespace SubtitlesViewer
 
             paragraph.Alignment = NSTextAlignment.Center;
             paragraph.LineBreakMode = NSLineBreakMode.ByWordWrapping;
-
-
+            
             var attrString = new NSAttributedString
             (
-                text,
-                font: NSFont.FromFontName("Arial", 72.0f),
+                text + "\n",
+                font: NSFont.FromFontName("Arial", 50.0f),
                 foregroundColor: NSColor.White,
                 backgroundColor: NSColor.FromCalibratedRgba(0, 0, 0, 0.0f),
                 paragraphStyle: paragraph
@@ -208,8 +204,8 @@ namespace SubtitlesViewer
             {
                 NSApplication.SharedApplication.BeginInvokeOnMainThread(() =>
                 {
-                    subtitleTextField.AttributedStringValue = GetAttributedString(e.Item.StartTimeFormatted 
-                    + " "+e.Item.SubTitle);
+                    subtitleTextButton.AttributedTitle = GetAttributedString(e.Item.StartTimeFormatted
+                    + " " + e.Item.SubTitle);
 
                 });
             }
