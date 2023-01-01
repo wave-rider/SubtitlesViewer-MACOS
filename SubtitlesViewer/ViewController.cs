@@ -88,8 +88,6 @@ namespace SubtitlesViewer
             subtitlesPanel.OrderFront(null);
             subtitlesPanel.KeyPressed += SubtitlesPanel_KeyPressed;
           
-            subtitleTextButton = new NSButton(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HEIGHT-30))
-
             subtitleTextButton = new NSButton(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HEIGHT - 30))
             {
                 Title = "",
