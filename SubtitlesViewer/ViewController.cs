@@ -88,7 +88,7 @@ namespace SubtitlesViewer
             subtitlesPanel.OrderFront(null);
             subtitlesPanel.KeyPressed += SubtitlesPanel_KeyPressed;
           
-            subtitleTextButton = new NSButton(new CoreGraphics.CGRect(40, 0, screenRes.Width - 120, PANEL_HEIGHT - 30))
+            subtitleTextButton = new NSButton(new CoreGraphics.CGRect(80, 0, screenRes.Width - 120, PANEL_HEIGHT - 30))
             {
                 Title = "",
                 WantsLayer = true
@@ -98,21 +98,21 @@ namespace SubtitlesViewer
             subtitleTextButton.Bordered = false;
             // https://stackoverflow.com/questions/36112061/remove-background-from-nsbutton
 
-            forwardButton = new NSButton(new CoreGraphics.CGRect(0, 0, 40, 30));
+            forwardButton = new NSButton(new CoreGraphics.CGRect(0, 0, 80, 30));
             forwardButton.Title = ">>";
             forwardButton.Activated += (object sender, EventArgs e) => {
                 subtitlesProvider.Forward();
                 _timer.Start();
             };
 
-            backButton = new NSButton(new CoreGraphics.CGRect(0, 30, 40, 30));
+            backButton = new NSButton(new CoreGraphics.CGRect(0, 30, 80, 30));
             backButton.Title = "<<";
             backButton.Activated += (object sender, EventArgs e) => {
                 subtitlesProvider.Back();
                 _timer.Start();
             };
 
-            startStopButton = new NSButton(new CoreGraphics.CGRect(0, 60, 40, 30));
+            startStopButton = new NSButton(new CoreGraphics.CGRect(0, 60, 80, 30));
             startStopButton.Title = "Play";
             startStopButton.Activated += (object sender, EventArgs e) => {
                 subtitlesProvider.StartStop(subtitlesProvider.Playing);
